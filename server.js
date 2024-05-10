@@ -43,6 +43,45 @@ app.get("/clothes", (req, res) => {
   });
 });
 
+app.post("/clothes", (req, res) => {
+  const { image, name, price, rating } = req.body;
+
+  fs.readFile("db.json", "utf8", (err, data) => {
+    if (err) {
+      console.log(err);
+      res.status(500).send("Internal Server Error");
+      return;
+    }
+
+    const jsonData = JSON.parse(data);
+
+    const maxId = jsonData.items.reduce(
+      (max, item) => Math.max(max, item.id),
+      0
+    );
+
+    const newItem = {
+      id: maxId + 1,
+      image,
+      name,
+      price,
+      rating,
+    };
+
+    jsonData.items.push(newItem);
+
+    fs.writeFile("db.json", JSON.stringify(jsonData), (err) => {
+      if (err) {
+        console.log(err);
+        res.status(500).send("Internal Server Error");
+        return;
+      }
+
+      res.status(201).json(newItem);
+    });
+  });
+});
+
 app.listen(port, () => {
   console.log(`Server listening at http://localhost:${port}`);
 });
