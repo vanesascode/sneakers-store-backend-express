@@ -122,6 +122,39 @@ app.put("/clothes/:id", (req, res) => {
   });
 });
 
+app.delete("/clothes/:id", (req, res) => {
+  const id = parseInt(req.params.id);
+
+  fs.readFile("db.json", "utf8", (err, data) => {
+    if (err) {
+      console.log(err);
+      res.status(500).send("Internal Server Error");
+      return;
+    }
+
+    const jsonData = JSON.parse(data);
+
+    const index = jsonData.items.findIndex((item) => item.id === id);
+
+    if (index === -1) {
+      res.status(404).send("Not Found");
+      return;
+    }
+
+    jsonData.items.splice(index, 1);
+
+    fs.writeFile("db.json", JSON.stringify(jsonData), (err) => {
+      if (err) {
+        console.log(err);
+        res.status(500).send("Internal Server Error");
+        return;
+      }
+
+      res.status(204).send();
+    });
+  });
+});
+
 app.listen(port, () => {
   console.log(`Server listening at http://localhost:${port}`);
 });
