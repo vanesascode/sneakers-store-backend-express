@@ -3,3 +3,7 @@
 ### Run the server:
 
 `node server.js`
+
+## Firebase
+
+`npm install firebase`
