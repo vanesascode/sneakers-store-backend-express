@@ -1,6 +1,8 @@
 const express = require("express");
 const fs = require("fs");
 const cors = require("cors");
+const { collection, getDocs } = require("firebase/firestore");
+const { db } = require("./firebase/config");
 
 const app = express();
 const port = 3000;
@@ -15,6 +17,23 @@ app.use(cors(corsOptions));
 
 app.use(express.json());
 
+app.get("/artsphere", (req, res) => {
+  const docRef = collection(db, "artsphere");
+  getDocs(docRef)
+    .then((querySnapshot) => {
+      const data = [];
+      querySnapshot.forEach((doc) => {
+        data.push({ id: doc.id, ...doc.data() });
+      });
+      res.status(200).json(data);
+      console.log(data);
+    })
+    .catch((error) => {
+      res.status(500).json({ error: error.message });
+    });
+});
+
+// localhost:3000/clothes?page=0&perPage=10
 app.get("/clothes", (req, res) => {
   const page = parseInt(req.query.page) || 0;
   const perPage = parseInt(req.query.perPage) || 10;
