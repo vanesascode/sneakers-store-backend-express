@@ -7,7 +7,7 @@ const port = 3000;
 
 const corsOptions = {
   origin: "https://velocityfit.vercel.app/",
-  optionsSuccessStatus: 204,
+  optionsSuccessStatus: 200,
   methods: "GET, POST, PUT, DELETE",
 };
 
