@@ -1,17 +1,15 @@
 const express = require("express");
 const fs = require("fs");
-// const cors = require("cors");
+const cors = require("cors");
 
 const app = express();
 const port = 3000;
 
-// const corsOptions = {
-//   origin: "https://velocityfit.vercel.app/",
-//   optionsSuccessStatus: 200,
-//   methods: "GET, POST, PUT, DELETE",
-// };
+const corsOptions = {
+  origin: "*",
+};
 
-// app.use(cors(corsOptions));
+app.use(cors(corsOptions));
 
 app.use(express.json());
 
